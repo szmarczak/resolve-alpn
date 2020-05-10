@@ -35,8 +35,8 @@ const result = await resolveALPN({
 
 console.log(result); // {alpnProtocol: 'h2', socket: tls.TLSSocket}
 
-// Remember to close the socket!
-result.socket.end();
+// Remember to destroy the socket if you don't use it!
+result.socket.destroy();
 ```
 
 ## License
