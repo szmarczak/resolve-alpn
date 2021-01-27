@@ -11,7 +11,7 @@ Returns an object with an `alpnProtocol` property. The `socket` property may be 
 ```js
 const result = await resolveALPN({
 	host: 'nghttp2.org',
-  port: 443,
+	port: 443,
 	ALPNProtocols: ['h2', 'http/1.1']
 	servername: 'nghttp2.org'
 });
@@ -33,9 +33,9 @@ If you set this to true, it will return the socket in a `socket` property.
 ```js
 const result = await resolveALPN({
 	host: 'nghttp2.org',
-  port: 443,
+	port: 443,
 	ALPNProtocols: ['h2', 'http/1.1'],
-  servername: 'nghttp2.org',
+	servername: 'nghttp2.org',
 	resolveSocket: true
 });
 
