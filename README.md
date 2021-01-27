@@ -12,7 +12,7 @@ Returns an object with an `alpnProtocol` property. The `socket` property may be 
 const result = await resolveALPN({
 	host: 'nghttp2.org',
 	port: 443,
-	ALPNProtocols: ['h2', 'http/1.1']
+	ALPNProtocols: ['h2', 'http/1.1'],
 	servername: 'nghttp2.org'
 });
 
