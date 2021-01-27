@@ -11,13 +11,15 @@ Returns an object with an `alpnProtocol` property. The `socket` property may be 
 ```js
 const result = await resolveALPN({
 	host: 'nghttp2.org',
-        servername: 'nghttp2.org',
-	ALPNProtocols: ['h2', 'http/1.1'],
-        port: 443
+  port: 443,
+	ALPNProtocols: ['h2', 'http/1.1']
+	servername: 'nghttp2.org'
 });
 
 console.log(result); // {alpnProtocol: 'h2'}
 ```
+
+**Note:** While the `servername` option is not required in this case, many other servers do. It's best practice to set it anyway.
 
 #### options
 
@@ -31,9 +33,9 @@ If you set this to true, it will return the socket in a `socket` property.
 ```js
 const result = await resolveALPN({
 	host: 'nghttp2.org',
-        servername: 'nghttp2.org',
+  port: 443,
 	ALPNProtocols: ['h2', 'http/1.1'],
-        port: 443,	
+  servername: 'nghttp2.org',
 	resolveSocket: true
 });
 
