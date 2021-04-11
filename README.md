@@ -22,6 +22,8 @@ console.log(result); // {alpnProtocol: 'h2'}
 
 **Note:** While the `servername` option is not required in this case, many other servers do. It's best practice to set it anyway.
 
+**Note:** If the socket times out, the promise will resolve and `result.timeout` will be set to `true`.
+
 #### options
 
 Same as [TLS options](https://nodejs.org/api/tls.html#tls_tls_connect_options_callback).

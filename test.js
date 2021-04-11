@@ -64,7 +64,8 @@ test.after('cleanup', async () => {
 test('works', async t => {
 	const result = await resolveALPN(s.options);
 	t.deepEqual(result, {
-		alpnProtocol: 'h2'
+		alpnProtocol: 'h2',
+		timeout: false
 	});
 });
 
@@ -90,11 +91,12 @@ test('empty options', async t => {
 test('works with timeout', async t => {
 	t.timeout(100);
 
-	const {socket} = await resolveALPN({
+	const {socket, timeout} = await resolveALPN({
 		host: '123.123.123.123',
 		port: 443,
 		ALPNProtocols: ['h2'],
-		timeout: 1
+		timeout: 1,
+		resolveSocket: true
 	});
 
 	await new Promise((resolve, reject) => {
@@ -108,5 +110,5 @@ test('works with timeout', async t => {
 
 	socket.destroy();
 
-	t.pass();
+	t.true(timeout);
 });

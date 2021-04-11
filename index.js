@@ -2,22 +2,28 @@
 const tls = require('tls');
 
 module.exports = (options = {}) => new Promise((resolve, reject) => {
-	const socket = tls.connect(options, () => {
+	let timeout = false;
+
+	const callback = async () => {
 		if (options.resolveSocket) {
 			socket.off('error', reject);
-			resolve({alpnProtocol: socket.alpnProtocol, socket});
+			resolve({alpnProtocol: socket.alpnProtocol, socket, timeout});
+
+			if (timeout) {
+				await Promise.resolve();
+				socket.emit('timeout');
+			}
 		} else {
 			socket.destroy();
-			resolve({alpnProtocol: socket.alpnProtocol});
+			resolve({alpnProtocol: socket.alpnProtocol, timeout});
 		}
-	});
+	};
+
+	const socket = tls.connect(options, callback);
 
 	socket.on('error', reject);
 	socket.once('timeout', async () => {
-		socket.off('error', reject);
-		resolve({alpnProtocol: undefined, socket});
-
-		await Promise.resolve();
-		socket.emit('timeout');
+		timeout = true;
+		callback();
 	});
 });
