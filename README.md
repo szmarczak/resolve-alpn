@@ -1,6 +1,7 @@
 # `resolve-alpn`
 
-[![Build Status](https://travis-ci.org/szmarczak/resolve-alpn.svg?branch=master)](https://travis-ci.org/szmarczak/resolve-alpn) [![Coverage Status](https://coveralls.io/repos/github/szmarczak/resolve-alpn/badge.svg?branch=master)](https://coveralls.io/github/szmarczak/resolve-alpn?branch=master)
+[![Node CI](https://github.com/szmarczak/resolve-alpn/workflows/Node%20CI/badge.svg)](https://github.com/szmarczak/resolve-alpn/actions)
+[![codecov](https://codecov.io/gh/szmarczak/resolve-alpn/branch/master/graph/badge.svg)](https://codecov.io/gh/szmarczak/resolve-alpn)
 
 ## API
 
