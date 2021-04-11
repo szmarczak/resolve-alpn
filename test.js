@@ -1,11 +1,11 @@
 const http2 = require('http2');
 const tls = require('tls');
-const util = require('util');
+const {promisify} = require('util');
 const test = require('ava');
 const pem = require('pem');
 const resolveALPN = require('.');
 
-const createCertificate = util.promisify(pem.createCertificate);
+const createCertificate = promisify(pem.createCertificate);
 
 const createServer = async () => {
 	const caKeys = await createCertificate({
@@ -34,8 +34,8 @@ const createServer = async () => {
 
 	const s = http2.createSecureServer({cert, key, allowHTTP1: true});
 
-	s.listen = util.promisify(s.listen);
-	s.close = util.promisify(s.close);
+	s.listen = promisify(s.listen);
+	s.close = promisify(s.close);
 
 	s.options = {
 		host: 'localhost',
@@ -87,7 +87,6 @@ test('empty options', async t => {
 });
 
 test('works with timeout', async t => {
-	// eslint-disable-next-line ava/use-t-well
 	t.timeout(100);
 
 	const {socket} = await resolveALPN({
