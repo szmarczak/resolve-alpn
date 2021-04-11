@@ -13,4 +13,11 @@ module.exports = (options = {}) => new Promise((resolve, reject) => {
 	});
 
 	socket.on('error', reject);
+	socket.once('timeout', async () => {
+		socket.off('error', reject);
+		resolve({alpnProtocol: undefined, socket});
+
+		await Promise.resolve();
+		socket.emit('timeout');
+	});
 });

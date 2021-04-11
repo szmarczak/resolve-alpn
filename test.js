@@ -1,9 +1,9 @@
-import http2 from 'http2';
-import tls from 'tls';
-import util from 'util';
-import test from 'ava';
-import pem from 'pem';
-import resolveALPN from '.';
+const http2 = require('http2');
+const tls = require('tls');
+const util = require('util');
+const test = require('ava');
+const pem = require('pem');
+const resolveALPN = require('.');
 
 const createCertificate = util.promisify(pem.createCertificate);
 
@@ -81,5 +81,32 @@ test('`resolveSocket` option', async t => {
 });
 
 test('empty options', async t => {
-	await t.throwsAsync(() => resolveALPN(), {code: 'ECONNREFUSED'});
+	const {code} = await t.throwsAsync(() => resolveALPN());
+
+	t.true(code === 'ECONNREFUSED' || code === 'ERR_MISSING_ARGS');
+});
+
+test('works with timeout', async t => {
+	// eslint-disable-next-line ava/use-t-well
+	t.timeout(100);
+
+	const {socket} = await resolveALPN({
+		host: '123.123.123.123',
+		port: 443,
+		ALPNProtocols: ['h2'],
+		timeout: 1
+	});
+
+	await new Promise((resolve, reject) => {
+		socket.once('error', error => {
+			reject(error);
+			t.fail(error);
+		});
+
+		socket.once('timeout', resolve);
+	});
+
+	socket.destroy();
+
+	t.pass();
 });
