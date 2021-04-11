@@ -81,9 +81,9 @@ test('`resolveSocket` option', async t => {
 });
 
 test('empty options', async t => {
-	const {code} = await t.throwsAsync(() => resolveALPN());
+	const error = await t.throwsAsync(() => resolveALPN());
 
-	t.true(code === 'ECONNREFUSED' || code === 'ERR_MISSING_ARGS');
+	t.true(error.code === 'ECONNREFUSED' || error.code === 'ERR_MISSING_ARGS', error.stack);
 });
 
 test('works with timeout', async t => {
