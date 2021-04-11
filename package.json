@@ -4,7 +4,7 @@
     "description": "Detects the ALPN protocol",
     "main": "index.js",
     "scripts": {
-        "test": "xo && nyc ava"
+        "test": "xo && nyc --reporter=lcovonly --reporter=text --reporter=html ava"
     },
     "repository": {
         "type": "git",
