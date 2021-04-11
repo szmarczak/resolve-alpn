@@ -5,8 +5,10 @@ module.exports = (options = {}) => new Promise((resolve, reject) => {
 	let timeout = false;
 
 	const callback = async () => {
+		socket.off('timeout', onTimeout);
+		socket.off('error', reject);
+
 		if (options.resolveSocket) {
-			socket.off('error', reject);
 			resolve({alpnProtocol: socket.alpnProtocol, socket, timeout});
 
 			if (timeout) {
@@ -19,11 +21,13 @@ module.exports = (options = {}) => new Promise((resolve, reject) => {
 		}
 	};
 
+	const onTimeout = async () => {
+		timeout = true;
+		callback();
+	};
+
 	const socket = tls.connect(options, callback);
 
 	socket.on('error', reject);
-	socket.once('timeout', async () => {
-		timeout = true;
-		callback();
-	});
+	socket.once('timeout', onTimeout);
 });
