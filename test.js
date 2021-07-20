@@ -112,3 +112,49 @@ test('works with timeout', async t => {
 
 	t.true(timeout);
 });
+
+test('accept custom createConnection function', async t => {
+	const custom = Symbol('custom');
+
+	const result = await resolveALPN({
+		...s.options,
+		resolveSocket: true
+	}, (options, callback) => {
+		const socket = tls.connect(options, callback);
+		socket[custom] = true;
+
+		return socket;
+	});
+
+	t.is(result.alpnProtocol, 'h2');
+	t.true(result.socket instanceof tls.TLSSocket);
+	t.true(result.socket[custom]);
+
+	result.socket.destroy();
+});
+
+test('async createConnection function', async t => {
+	const custom = Symbol('custom');
+
+	const result = await resolveALPN({
+		...s.options,
+		resolveSocket: true
+	}, async (options, callback) => {
+		return new Promise((resolve, reject) => {
+			const socket = tls.connect(options, callback);
+			socket[custom] = true;
+
+			socket.once('error', reject);
+			socket.once('connect', () => {
+				socket.off('error', reject);
+				resolve(socket);
+			});
+		});
+	});
+
+	t.is(result.alpnProtocol, 'h2');
+	t.true(result.socket instanceof tls.TLSSocket);
+	t.true(result.socket[custom]);
+
+	result.socket.destroy();
+});

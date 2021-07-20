@@ -5,7 +5,7 @@
 
 ## API
 
-### resolveALPN(options)
+### resolveALPN(options, connect = tls.connect)
 
 Returns an object with an `alpnProtocol` property. The `socket` property may be also present.
 
@@ -47,6 +47,11 @@ console.log(result); // {alpnProtocol: 'h2', socket: tls.TLSSocket}
 // Remember to destroy the socket if you don't use it!
 result.socket.destroy();
 ```
+
+#### connect
+
+Type: `Function<TLSSocket> | AsyncFunction<TLSSocket>`\
+Default: [`tls.connect`](https://nodejs.org/dist/latest-v16.x/docs/api/tls.html#tls_tls_connect_options_callback)
 
 ## License
 
