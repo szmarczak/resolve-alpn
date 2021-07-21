@@ -53,6 +53,8 @@ result.socket.destroy();
 Type: `Function<TLSSocket> | AsyncFunction<TLSSocket>`\
 Default: [`tls.connect`](https://nodejs.org/dist/latest-v16.x/docs/api/tls.html#tls_tls_connect_options_callback)
 
+**Note:** No matter which function is used (synchronous or asynchronous), it **must** accept a `callback` function as a second argument. The `callback` function gets executed when the socket has successfully connected.
+
 ## License
 
 MIT
