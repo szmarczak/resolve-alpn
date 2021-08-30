@@ -158,3 +158,29 @@ test('async createConnection function', async t => {
 
 	result.socket.destroy();
 });
+
+test('waits for promise to be resolved', async t => {
+	const custom = Symbol('custom');
+
+	const result = await resolveALPN({
+		...s.options,
+		resolveSocket: true
+	}, async (options, callback) => {
+		const socket = tls.connect(options, callback);
+		socket[custom] = true;
+
+		await new Promise(resolve => {
+			socket.once('secureConnect', resolve);
+		});
+
+		return socket;
+	});
+
+	t.is(result.alpnProtocol, 'h2');
+	t.true(result.socket instanceof tls.TLSSocket);
+	t.true(result.socket[custom]);
+
+	t.is(result.socket.listenerCount('error'), 0);
+
+	result.socket.destroy();
+});
